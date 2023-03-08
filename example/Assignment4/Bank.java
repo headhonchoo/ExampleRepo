@@ -33,56 +33,56 @@ public class Bank {
 
     public static void printAccounts() {
 
-        for (Account a : accounts) {
+        for (Account x : accounts) {
 
-            System.out.println(a);
+            System.out.println(x);
         }
     }
 
     public static Account findAccount(int accountNumber) {
 
-        for (Account a : accounts) {
+        for (Account x : accounts) {
 
-            if (a.getAccountNumber() == accountNumber) return a;
+            if (x.getAccountNumber() == accountNumber) return x;
         }
 
         return null;
     }
 
     public static boolean deposit(int accountNumber, double amount) {
-        for (Account a : accounts) {
+        for (Account x : accounts) {
 
-            if (a.getAccountNumber() == accountNumber) {
+            if (x.getAccountNumber() == accountNumber) {
 
-                return a.deposit(amount);
+                return x.deposit(amount);
             }
         }
         return false;
     }
 
     public static boolean withdraw(int accountNumber, double amount) {
-        for (Account a : accounts) {
+        for (Account x : accounts) {
 
-            if (a.getAccountNumber() == accountNumber) {
+            if (x.getAccountNumber() == accountNumber) {
 
-                if (a.getType().equals("Checking")) {
+                if (x.getType().equals("Checking")) {
 
-                    CheckingAccount checkingAccount = (CheckingAccount) a;
+                    CheckingAccount checkingAccount = (CheckingAccount) x;
                     return checkingAccount.withdraw(amount);
                 }
-                return a.withdraw(amount);
+                return x.withdraw(amount);
             }
         }
         return false;
     }
 
     public static boolean closeAccount(int accountNumber) {
-        for (Account a : accounts) {
+        for (Account x : accounts) {
 
-            if (a.getAccountNumber() == accountNumber) {
+            if (x.getAccountNumber() == accountNumber) {
 
 
-                a.closeAccount();
+                x.closeAccount();
                 return true;
             }
         }
