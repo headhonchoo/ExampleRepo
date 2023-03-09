@@ -37,7 +37,7 @@ public class Main {
                     closeAccount(scan);
                     break;
                 case "8":
-                    System.out.println("Thank you");
+                    System.out.println("Thank you, goodbye ");
                     break;
                 default:
                     System.out.println("Wrong input");
