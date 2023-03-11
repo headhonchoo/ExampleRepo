@@ -13,6 +13,8 @@ public class DirectoryAnalyzer {
 
 	       String directoryName = args[0];
 	       File directory = new File(directoryName);
+	       
+	       System.out.println();
 
 	       //Check if directory exists and is a directory
 	       if (!directory.exists()) {

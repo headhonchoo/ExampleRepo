@@ -12,30 +12,30 @@ public class FileCopy {
 		    String sourceFile = args[0];
 		    String targetFile = args[1];
 
-		    //Check if source file exists
+		    //This will check if source file exists
 		    File file = new File(sourceFile);
 		    if (!file.exists() || !file.isFile()) {
 		      System.out.println("Error: Source file does not exist or is not a file.");
 		      System.exit(1);
 		    }
 
-		    //Check if target file is a directory
+		    //This will check if target file is a directory
 		    file = new File(targetFile);
 		    if (file.isDirectory()) {
 		      System.out.println("Error: Target file is a directory.");
 		      System.exit(1);
 		    }
 
-		    //Check if target file already exists
+		    //This will check if target file already exists
 		    if (file.exists()) {
 		      System.out.println("Error: Target file already exists.");
 		      System.exit(1);
 		    }
 
-		    //Create directories if needed
+		    //This creates directories if needed
 		    file.getParentFile().mkdirs();
 
-		    //Copy file
+		    //Then copies file
 		    try (
 		      InputStream in = new FileInputStream(sourceFile);
 		      OutputStream out = new FileOutputStream(targetFile)
