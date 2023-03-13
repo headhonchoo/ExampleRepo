@@ -5,7 +5,7 @@ import java.util.Scanner;
 public class Main {
 	static ArrayList<Transaction> transactions = new ArrayList<>();
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws AccountClosedException, InsufficientBalanceException, NoSuchAccountException {
 
         Scanner scan = new Scanner(System.in);
 
@@ -65,7 +65,7 @@ public class Main {
         }
     }
 
-    private static void makeWithdraw(Scanner scan) {
+    private static void makeWithdraw(Scanner scan) throws AccountClosedException, InsufficientBalanceException, NoSuchAccountException {
         System.out.print("Enter account number: ");
         int accountNum = scan.nextInt();
 
@@ -90,7 +90,7 @@ public class Main {
         }
     }
 
-    private static void makeDeposit(Scanner scan) {
+    private static void makeDeposit(Scanner scan) throws AccountClosedException {
 
         System.out.print("Enter account number: ");
         int accountNum = scan.nextInt();

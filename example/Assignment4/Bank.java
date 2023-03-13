@@ -49,7 +49,7 @@ public class Bank {
         return null;
     }
 
-    public static boolean deposit(int accountNumber, double amount) {
+    public static boolean deposit(int accountNumber, double amount) throws AccountClosedException {
         for (Account x : accounts) {
 
             if (x.getAccountNumber() == accountNumber) {
@@ -57,10 +57,11 @@ public class Bank {
                 return x.deposit(amount);
             }
         }
+        
         return false;
     }
 
-    public static boolean withdraw(int accountNumber, double amount) {
+    public static boolean withdraw(int accountNumber, double amount) throws AccountClosedException, InsufficientBalanceException, NoSuchAccountException {
         for (Account x : accounts) {
 
             if (x.getAccountNumber() == accountNumber) {
@@ -73,6 +74,7 @@ public class Bank {
                 return x.withdraw(amount);
             }
         }
+        
         return false;
     }
 
@@ -86,6 +88,7 @@ public class Bank {
                 return true;
             }
         }
+        
         return false;
     }
     
@@ -131,4 +134,3 @@ public class Bank {
       */
 
 }
-

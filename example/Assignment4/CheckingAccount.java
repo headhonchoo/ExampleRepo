@@ -8,35 +8,26 @@ public class CheckingAccount extends Account {
     }
 
     @Override
-    public boolean withdraw(double amount) {
-
-        double balance = super.getBalance() - amount;
-
-
-        if(!super.isOpen() && balance >= 0){
-
-            return super.withdraw(amount);
+    public boolean withdraw(double amount) throws AccountClosedException, InsufficientBalanceException {
+        if (!isOpen()) {
+            throw new AccountClosedException("Account is closed. Cannot withdraw money.");
         }
+        if (amount <= 0) {
+           throw new IllegalArgumentException("Invalid amount. Withdrawal amount must be greater than zero."); }
 
-        if(!super.isOpen() && balance <= 0){
-            return false;
-        }
-
-        if ( balance < 0) {
-
-            balance = balance * (-1);
-
-            if (balance <= overdraftLimit) {
-                setBalance(balance*-1);
-                return true;
-            } else {
-                return false;
-            }
-        }
-
-
-        setBalance(balance*-1);
-        return true;
+     if (getBalance() - amount < -overdraftLimit) {
+        throw new InsufficientBalanceException("Withdrawal amount exceeds overdraft limit.");
     }
 
+    setBalance(getBalance() - amount);
+    return true;
+    }
+
+    public double getOverdraftLimit() {
+    return overdraftLimit;
+    }
+
+    public void setOverdraftLimit(double overdraftLimit) {
+    this.overdraftLimit = overdraftLimit;
+    }
 }

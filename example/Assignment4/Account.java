@@ -16,18 +16,29 @@ public class Account {
         this.balance = 0;
 
     }
-
-    public boolean withdraw(double amount) {
-
-        if (this.balance - amount < 0) return false;
-        this.balance = this.balance - amount;
+    
+    public boolean withdraw(double amount) throws AccountClosedException, InsufficientBalanceException {
+        if (!isOpen()) {
+            throw new AccountClosedException("Account is closed. Cannot withdraw money.");
+        }
+        if (amount <= 0) {
+            throw new IllegalArgumentException("Invalid amount. Amount must be greater than zero.");
+        }
+        if (this.balance - amount < -getOverdraftLimit()) {
+            throw new InsufficientBalanceException("Insufficient funds. Cannot withdraw money.");
+        }
+        this.balance -= amount;
         return true;
     }
 
-    public boolean deposit(double amount) {
-
-        if (this.balance >= 0 && !isOpen()) return false;
-        this.balance = this.balance + amount;
+    public boolean deposit(double amount) throws AccountClosedException {
+        if (!isOpen()) {
+            throw new AccountClosedException("Account is closed. Cannot deposit money.");
+        }
+        if (amount <= 0) {
+            throw new IllegalArgumentException("Invalid amount. Amount must be greater than zero.");
+        }
+        this.balance += amount;
         return true;
     }
 
@@ -55,13 +66,15 @@ public class Account {
         return accountNumber;
     }
 
+    public double getOverdraftLimit() {
+        return 0;
+    }
+
     @Override
     public String toString() {
-
         if (accountOpen) {
             return this.accountNumber + "(" + type + ") : " + this.accountHolder.toString() + " : " + this.balance + " : Account Open";
         }
         return this.accountNumber + "(" + type + ") : " + this.accountHolder.toString() + " : " + this.balance + " : Account Closed";
-
     }
-}
+ }
