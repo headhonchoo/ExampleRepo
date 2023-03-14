@@ -5,6 +5,9 @@ import java.util.Map;
 import java.util.TreeMap;
 
 public class Bank {
+	//Part 5, question 2 in assignment 5, I used TreeMap for sorting.
+	//Java TreeMaps are very efficient to search through, making them ideal for applications requiring fast access. 
+	//They also offer an easy way to sort elements by their keys, values, or both. Which is why I utilized TreeMap in my application
 	private static Map<Integer, Account> accounts = new TreeMap<>();
 	private static int accountNumbers = 100;
 
