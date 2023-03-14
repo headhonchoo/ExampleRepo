@@ -58,7 +58,6 @@ public class Main {
         Account account = Bank.findAccount(accountNum);
 
         if (account == null) {
-            //System.out.println("Account not found");
             throw new NoSuchAccountException("An account does not exists.");
             //return;
         }
@@ -106,8 +105,6 @@ public class Main {
         Account account = Bank.findAccount(accountNum);
 
         if (account == null) {
-            //System.out.println("Account not found");
-            //return;
             throw new NoSuchAccountException("An account does not exists.");
         }
 
