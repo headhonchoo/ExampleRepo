@@ -1,96 +1,72 @@
 //Sidney Mcclendon (smcclendon1@csudh.edu)
 import java.util.ArrayList;
 import java.util.Scanner;
-
+import java.util.Map;
+import java.util.TreeMap;
 public class Bank {
-	private static ArrayList<Account> accounts = new ArrayList<Account>();
-    private static int accountNumbers = 100;
+	private static Map<Integer, Account> accounts = new TreeMap<>();
+	private static int accountNumbers = 100;
 
-    private Bank() {
-    	
-    }
+	private Bank() {
+		
+	}
+	    
+	    public static Account openAccount(String firstName, String lastName, String email, String SSN, String accountType) {
+	        Person customer = new Person(firstName, lastName, email, SSN);
 
-    public static Account openAccount(String firstName, String lastName, String email, String SSN, String accountType) {
-        Person customer = new Person(firstName, lastName, email, SSN);
+	        if (accountType.equals("Checking")) {
+	            Scanner scan = new Scanner(System.in);
+	            System.out.print("Enter overdraft limit: ");
+	            double overDraftLimit = scan.nextDouble();
+	            scan.nextLine();
+	            CheckingAccount account = new CheckingAccount(accountNumbers++, accountType, customer, overDraftLimit);
+	            accounts.put(account.getAccountNumber(), account);
+	            return account;
+	        }
+	        Account account = new Account(accountNumbers++, accountType, customer);
+	        accounts.put(account.getAccountNumber(), account);
+	        return account;
+	    }
 
-        if (accountType.equals("Checking")) {
-            Scanner scan = new Scanner(System.in);
-            System.out.print("Enter overdraft limit: ");
-            double overDraftLimit = scan.nextDouble();
-            scan.nextLine();
-            CheckingAccount account = new CheckingAccount(accountNumbers++, accountType, customer, overDraftLimit);
-            accounts.add(account);
-            return account;
-            
-        }
-        
-        Account account = new Account(accountNumbers++, accountType, customer);
-        accounts.add(account);
-        return account;
-     
-    }
+	    public static void printAccounts() {
 
+	        for(int n: accounts.keySet()) {
+	            System.out.println(accounts.get(n));
+	        }
+	    }
+	    
+	    public static Account findAccount(int accountNumber) {
+	        return accounts.get(accountNumber);
+	    }
+	    
+	    public static boolean deposit(int accountNumber, double amount) throws AccountClosedException {
+	        Account account = accounts.get(accountNumber);
+	        if (account != null) {
+	            return account.deposit(amount);
+	        }
+	        return false;
+	    }
 
-    public static void printAccounts() {
+	    public static boolean withdraw(int accountNumber, double amount) throws AccountClosedException, InsufficientBalanceException {
+	        Account account = accounts.get(accountNumber);
+	        if (account != null) {
+	            if (account.getType().equals("Checking")) {
+	                CheckingAccount checkingAccount = (CheckingAccount) account;
+	                return checkingAccount.withdraw(amount);
+	            }
+	            return account.withdraw(amount);
+	        }
+	        return false;
+	    }
 
-        for (Account x : accounts) {
-
-            System.out.println(x);
-        }
-    }
-
-    public static Account findAccount(int accountNumber) {
-
-        for (Account x : accounts) {
-
-            if (x.getAccountNumber() == accountNumber) return x;
-        }
-
-        return null;
-    }
-
-    public static boolean deposit(int accountNumber, double amount) throws AccountClosedException {
-        for (Account x : accounts) {
-
-            if (x.getAccountNumber() == accountNumber) {
-
-                return x.deposit(amount);
-            }
-        }
-        
-        return false;
-    }
-
-    public static boolean withdraw(int accountNumber, double amount) throws AccountClosedException, InsufficientBalanceException, NoSuchAccountException {
-        for (Account x : accounts) {
-
-            if (x.getAccountNumber() == accountNumber) {
-
-                if (x.getType().equals("Checking")) {
-
-                    CheckingAccount checkingAccount = (CheckingAccount) x;
-                    return checkingAccount.withdraw(amount);
-                }
-                return x.withdraw(amount);
-            }
-        }
-        
-        return false;
-    }
-
-    public static boolean closeAccount(int accountNumber) {
-        for (Account x : accounts) {
-
-            if (x.getAccountNumber() == accountNumber) {
-
-
-                x.closeAccount();
-                return true;
-            }
-        }
-        
-        return false;
-    }
+	    public static boolean closeAccount(int accountNumber) {
+	        Account account = accounts.get(accountNumber);
+	        if (account != null) {
+	            account.closeAccount();
+	            return true;
+	        }
+	        return false;
+	    }
     
   //The following methods must be implemented
 	

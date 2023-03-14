@@ -1,16 +1,17 @@
 //Sidney Mcclendon (smcclendon1@csudh.edu)
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Scanner;
 
 public class Main {
 	static ArrayList<Transaction> transactions = new ArrayList<>();
 
-    public static void main(String[] args) throws AccountClosedException, InsufficientBalanceException, NoSuchAccountException {
-
+    public static void main(String[] args) throws AccountClosedException, InsufficientBalanceException, NoSuchAccountException, IOException {
         Scanner scan = new Scanner(System.in);
 
-
-        String input;
+        String input = "";
         do {
             printMenu();
             System.out.print("Please enter your choice: ");
@@ -37,16 +38,19 @@ public class Main {
                     closeAccount(scan);
                     break;
                 case "8":
+                    saveTransaction(scan);
+                    break;
+                case "9":
                     System.out.println("Thank you, goodbye ");
                     break;
                 default:
-                    System.out.println("Wrong input");
+                    System.out.println("Wrong input ");
             }
-        } while (!input.equals("8"));
+        } while (!input.equals("9"));
 
     }
 
-    private static void closeAccount(Scanner scan) {
+    private static void closeAccount(Scanner scan) throws NoSuchAccountException {
         System.out.print("Enter account number to close: ");
         int accountNum = scan.nextInt();
         scan.nextLine();
@@ -54,8 +58,9 @@ public class Main {
         Account account = Bank.findAccount(accountNum);
 
         if (account == null) {
-            System.out.println("Account not found");
-            return;
+            //System.out.println("Account not found");
+            throw new NoSuchAccountException("An account does not exists.");
+            //return;
         }
 
         boolean isSuccess = Bank.closeAccount(accountNum);
@@ -76,8 +81,7 @@ public class Main {
         Account account = Bank.findAccount(accountNum);
 
         if (account == null) {
-            System.out.println("Account not found");
-            return;
+            throw new NoSuchAccountException("An account does not exists.");
         }
 
         boolean isSuccess = Bank.withdraw(accountNum, amount);
@@ -90,7 +94,7 @@ public class Main {
         }
     }
 
-    private static void makeDeposit(Scanner scan) throws AccountClosedException {
+    private static void makeDeposit(Scanner scan) throws AccountClosedException, NoSuchAccountException {
 
         System.out.print("Enter account number: ");
         int accountNum = scan.nextInt();
@@ -102,8 +106,9 @@ public class Main {
         Account account = Bank.findAccount(accountNum);
 
         if (account == null) {
-            System.out.println("Account not found");
-            return;
+            //System.out.println("Account not found");
+            //return;
+            throw new NoSuchAccountException("An account does not exists.");
         }
 
         boolean isSuccess = Bank.deposit(accountNum, amount);
@@ -116,7 +121,7 @@ public class Main {
         }
     }
 
-    private static void printAccountStatement(Scanner scan) {
+    private static void printAccountStatement(Scanner scan) throws NoSuchAccountException {
 
         System.out.print("Enter account number: ");
         int accountNum = scan.nextInt();
@@ -125,8 +130,7 @@ public class Main {
         Account account = Bank.findAccount(accountNum);
 
         if (account == null) {
-            System.out.println("Account not found");
-            return;
+            throw new NoSuchAccountException("An account does not exists.");
         }
 
         if (transactions != null) {
@@ -174,8 +178,36 @@ public class Main {
 
     }
 
-    private static void printMenu() {
+    private static void saveTransaction(Scanner scan) throws NoSuchAccountException, IOException {
+        System.out.print("Enter account number: ");
+        int accountNum = scan.nextInt();
+        scan.nextLine();
 
+        Account account = Bank.findAccount(accountNum);
+
+        if (account == null) {
+            throw new NoSuchAccountException("An account does not exist.");
+        }
+
+        if (transactions != null) {
+            File file = new File("transactions.txt");
+            FileWriter writer = new FileWriter(file);
+
+            for (Transaction t : transactions) {
+                if (t.getAccountNumber() == account.getAccountNumber()) {
+                    writer.write(t.toString() + System.lineSeparator());
+                }
+            }
+
+            writer.write("Balance: " + account.getBalance());
+            writer.close();
+        }
+        else {
+            System.out.println("No transactions found");
+        }
+    }
+
+    private static void printMenu() {
         System.out.println("\n1 - Open a Checking account");
         System.out.println("2 - Open a Saving account");
         System.out.println("3 - List Accounts");
@@ -183,7 +215,8 @@ public class Main {
         System.out.println("5 - Deposit funds");
         System.out.println("6 - Withdraw funds");
         System.out.println("7 - Close an account");
-        System.out.println("8 - Exit");
+        System.out.println("8 - Save Transactions");
+        System.out.println("9 - Exit");
     }
 
 }
