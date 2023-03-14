@@ -195,9 +195,10 @@ public class Main {
                     writer.write(t.toString() + System.lineSeparator());
                 }
             }
-
+            //Write data as characters into a file transactions.txt
             writer.write("Balance: " + account.getBalance());
             writer.close();
+            //Sep file will appear when user chooses 8 and it will keep track of the transactions
         }
         else {
             System.out.println("No transactions found");
